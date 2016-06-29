@@ -2,7 +2,7 @@ const net = require('net');
 
 var server = net.createServer()
   .on('listening', () => {
-      console.log("Listening on %s", server.address().port);
+      console.log("Listening on %s:%s", server.address().address, server.address().port);
     })
   .on('connection', (client) => {
     var client_addr = client.remoteAddress + ':' + client.remotePort;

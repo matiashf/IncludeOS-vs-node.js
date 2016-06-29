@@ -44,7 +44,7 @@ void Service::start() {
     if(!timeout)
       printf("Server IP updated: %s\n", server.local().to_string().c_str());
   });
-  printf("Server listening: %s \n", server.local().to_string().c_str());
+  printf("Listening on %s \n", server.local().to_string().c_str());
   // When someone connects to our server
   server
     .onDisconnect([](net::TCP::Connection_ptr client, Disconnect reason) {
