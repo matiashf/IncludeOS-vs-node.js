@@ -1,25 +1,12 @@
-const net = require('net');
+// Adapted from from https://nodejs.org/en/docs/guides/anatomy-of-an-http-transaction/
 
-var server = net.createServer()
-  .on('listening', () => {
-      console.log("Listening on %s:%s", server.address().address, server.address().port);
-    })
-  .on('connection', (client) => {
-    var client_addr = client.remoteAddress + ':' + client.remotePort;
-    console.log("Connect: %s", client_addr);
+const http = require('http');
 
-    client
-      .on('data', (buffer) => {
-          data = buffer.toString();
-          console.log("[%s] %s", client_addr,
-                      data.endsWith('\n') ? data.slice(0, -1) : data);
-          client.write(data);
-        })
-      .on('end', () => {
-          console.log("Disconnect: %s", client_addr);
-        })
-      .on('error', (err) => {
-          console.log('Error: %s: %s', client_addr, err.message);
-        })
-      })
-  .listen(8080);
+var server = http.createServer((request, response) => {
+  // TODO: Improve error handling
+  request.on('error', console.error);
+  response.on('error', console.error);
+  response.writeHead(200, {'Content-Type': request.headers['Content-Type']});
+  request.on('data', response.write.bind(response));
+  request.on('end', response.end.bind(response));
+}).listen(8080);
