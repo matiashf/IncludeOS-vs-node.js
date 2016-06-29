@@ -15,19 +15,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/*
-  An example to show incoming and outgoing TCP Connections.
-  In this example, IncludeOS is listening on port 80.
-
-  Data received on port 80 will be redirected to a
-  outgoing connection to a (in this case) python server (server.py)
-
-  Data received from the python server connection
-  will be redirected back to the client.
-
-  To try it out, use netcat to connect to this IncludeOS instance.
-*/
-
 #include <os>
 #include <net/inet4>
 
