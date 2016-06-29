@@ -61,16 +61,20 @@ void Service::start() {
   // When someone connects to our server
   server
     .onDisconnect([](net::TCP::Connection_ptr client, Disconnect reason) {
-        printf("Disconnected: %s: %s\n",
+        printf("Disconnect: %s: %s\n",
                client->to_string().c_str(), reason.to_string().c_str());
         client->close();
       })
     .onConnect([](net::TCP::Connection_ptr client) {
-      printf("Connected: %s\n", client->to_string().c_str());
+      printf("Connect: %s\n", client->to_string().c_str());
       client->read(1024, [client](auto buf, size_t size) {
           std::string data{(char *) buf.get(), size};
-          printf("Received: %s%s", data.c_str(), (data.back() == '\n') ? "" : "\n");
+          printf("[%s] %s%s", client->to_string().c_str(),
+                 data.c_str(), (data.back() == '\n') ? "" : "\n");
           client->write(data.data(), data.size());
+        });
+      client->onError([](Connection_ptr client, net::TCP::TCPException exc) {
+          printf("Error: %s: %s\n", client->to_string().c_str(), exc.what());
         });
       });
 }
