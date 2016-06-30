@@ -38,14 +38,9 @@ void Service::start() {
                         { 10,0,0,1 },       // Gateway
                         { 8,8,8,8 } );      // DNS
 
-  // Set up a TCP server on port 80
   auto& server = inet->tcp().bind(80);
-  inet->dhclient()->on_config([&server](bool timeout) {
-    if(!timeout)
-      printf("Server IP updated: %s\n", server.local().to_string().c_str());
-  });
   printf("Listening on %s \n", server.local().to_string().c_str());
-  // When someone connects to our server
+
   server
     .onDisconnect([](net::TCP::Connection_ptr client, Disconnect reason) {
         printf("Disconnect: %s: %s\n",
